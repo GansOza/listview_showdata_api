@@ -18,11 +18,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
-  List data;
+  bool isLoading= true;
 
+  List data;
   Future<String> getData() async{
-    
+
+    await Future.delayed(Duration(seconds: 3));//show data delayed by 3 sec
+
     http.Response response = await http.get(
         Uri.encodeFull("https://jsonplaceholder.typicode.com/posts"),
         headers:{
@@ -33,7 +35,7 @@ class _HomePageState extends State<HomePage> {
     this.setState((){
 
       data = jsonDecode(response.body);
-
+      isLoading= false;
     });
 
     data = jsonDecode(response.body);
@@ -45,6 +47,7 @@ class _HomePageState extends State<HomePage> {
     return "success!";
     
   }
+
   
   @override
   void initState(){
@@ -66,30 +69,58 @@ class _HomePageState extends State<HomePage> {
       */
 
 
-      body: new ListView.separated(
+      body: isLoading ? Center(child: CircularProgressIndicator()):
+      ListView.separated(
 
-        itemCount: data == null ? 0 :data.length,
-        separatorBuilder: (context,index)=> Divider(),
-        itemBuilder: (BuildContext context, int index){
+            itemCount: data == null ? 0 :data.length,
+            separatorBuilder: (context,index)=> Divider(),
+            itemBuilder: (BuildContext context, int index){
 
-          return ListTile(
-            isThreeLine: false,
-            leading:CircleAvatar(
-              child: new Icon(Icons.book,color: Colors.greenAccent,),//showing front of the line,
-            ) ,
-            trailing: new Icon(Icons.trending_down,color: Colors.green,),//showing end of the line
-            title: new Text('User ID :'+data[index]['id'].toString()),
-            subtitle: new Text('Title :'+data[index]['title'],maxLines: 2,overflow: TextOverflow.ellipsis,),
-          );
+              return ListTile(
+                isThreeLine: false,
+                leading:CircleAvatar(
+                  child: new Icon(Icons.book,color: Colors.greenAccent,),//showing front of the line,
+                ) ,
+                trailing: new Icon(Icons.trending_down,color: Colors.green,),//showing end of the line
+                title: new Text('User ID :'+data[index]['id'].toString()),
+                subtitle: new Text('Title :'+data[index]['title'],maxLines: 2,overflow: TextOverflow.ellipsis,),
+              );
 
 /*
             new Card(
             child: new Text(data[index]['title']),color: Colors.grey,
           );
 */
-        },
+            },
 
-      ),
+          ),
+      /*
+      ListView.separated(
+
+            itemCount: data == null ? 0 :data.length,
+            separatorBuilder: (context,index)=> Divider(),
+            itemBuilder: (BuildContext context, int index){
+
+              return ListTile(
+                isThreeLine: false,
+                leading:CircleAvatar(
+                  child: new Icon(Icons.book,color: Colors.greenAccent,),//showing front of the line,
+                ) ,
+                trailing: new Icon(Icons.trending_down,color: Colors.green,),//showing end of the line
+                title: new Text('User ID :'+data[index]['id'].toString()),
+                subtitle: new Text('Title :'+data[index]['title'],maxLines:                       2,overflow: TextOverflow.ellipsis,),
+              );
+
+/*
+            new Card(
+            child: new Text(data[index]['title']),color: Colors.grey,
+          );
+*/
+            },
+
+          ),
+
+          */
     );
   }
 }
