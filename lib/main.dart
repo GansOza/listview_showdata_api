@@ -66,15 +66,20 @@ class _HomePageState extends State<HomePage> {
       */
 
 
-      body: new ListView.builder(
+      body: new ListView.separated(
+
         itemCount: data == null ? 0 :data.length,
+        separatorBuilder: (context,index)=> Divider(),
         itemBuilder: (BuildContext context, int index){
 
           return ListTile(
             isThreeLine: false,
-            leading: new Icon(Icons.book,color: Colors.greenAccent,),
+            leading:CircleAvatar(
+              child: new Icon(Icons.book,color: Colors.greenAccent,),//showing front of the line,
+            ) ,
+            trailing: new Icon(Icons.trending_down,color: Colors.green,),//showing end of the line
             title: new Text('User ID :'+data[index]['id'].toString()),
-            subtitle: new Text('Title :'+data[index]['title']),
+            subtitle: new Text('Title :'+data[index]['title'],maxLines: 2,overflow: TextOverflow.ellipsis,),
           );
 
 /*
